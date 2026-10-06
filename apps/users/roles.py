@@ -1,0 +1,2 @@
+MANDANT = 'Mandant'
+STEUERBERATER = 'Steuerberater'
