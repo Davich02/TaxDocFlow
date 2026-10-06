@@ -29,4 +29,9 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
-admin.site.register(Mandate)
+@admin.register(Mandate)
+class MandateAdmin(admin.ModelAdmin):
+    list_display = ('steuerberater', 'mandant', 'is_active', 'created_at')
+    list_filter = ('is_active',)
+    search_fields = ('steuerberater__email', 'mandant__email')
+    exclude = ('deleted_at',)
