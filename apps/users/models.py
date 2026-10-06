@@ -1,6 +1,11 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.validators import RegexValidator
 from django.db import models
+from apps.core.models import UniqueID,TimeStampedModel
+from django.conf import settings
+from apps.core.managers import SoftDeleteManager
+from django.utils import timezone
+
 
 phone_validator = RegexValidator(
     regex=r'^\+?\d{9,15}$',
@@ -35,3 +40,21 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Mandate(UniqueID, TimeStampedModel):
+    steuerberater = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,related_name='mandates_as_steuerberater')
+    mandant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,related_name='mandates_as_mandant')
+    is_active = models.BooleanField(default=True)
+    objects = SoftDeleteManager()
+    all_objects = models.Manager()
+
+    def delete(self, *args, **kwargs):
+        self.deleted_at = timezone.now()
+        self.save(update_fields=['deleted_at'])
+
+    def __str__(self):
+        return f"{self.steuerberater.email} → {self.mandant.email}"
+
+    class Meta:
+        unique_together = ('mandant', 'steuerberater')
