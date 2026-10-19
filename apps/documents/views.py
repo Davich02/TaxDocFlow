@@ -16,3 +16,10 @@ class DocumentListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+class DocumentDetailView(generics.RetrieveAPIView):
+    serializer_class = DocumentSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+
+    def get_queryset(self):
+        return Document.visible_to(self.request.user)
