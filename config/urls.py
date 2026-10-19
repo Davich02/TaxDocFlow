@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from apps.users.views import MandateListCreateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('apps.users.urls')),
     path('api/documents/', include('apps.documents.urls')),
+    path('api/mandates/', MandateListCreateView.as_view())
 ]
