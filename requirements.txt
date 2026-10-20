@@ -9,3 +9,4 @@ djangorestframework-simplejwt
 pytesseract
 pdf2image
 Pillow
+anthropic
