@@ -5,6 +5,7 @@ from .models import Document
 from .ocr import extract_text
 from .serializers import DocumentSerializer
 import logging
+from .services import process_document
 
 logger = logging.getLogger(__name__)
 
@@ -19,12 +20,7 @@ class DocumentListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         document = serializer.save(owner=self.request.user)
-        try:
-            document.raw_text = extract_text(document.file.path)
-            document.status = Document.Status.OCR_DONE
-            document.save()
-        except Exception:
-            logger.exception('ORC failed for document',document.id)
+        process_document(document)
 
 
 
