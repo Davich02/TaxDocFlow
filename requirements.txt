@@ -6,3 +6,6 @@ mysqlclient==2.3.0
 python-decouple==3.8
 sqlparse==0.6.0
 djangorestframework-simplejwt
+pytesseract
+pdf2image
+Pillow
